@@ -1,4 +1,4 @@
-# Django Landing Page App
+# Django Landing Page App 
 
 A basic Django application with a landing page and user authentication.
 
