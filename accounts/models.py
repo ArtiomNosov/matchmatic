@@ -12,8 +12,9 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=20, choices=USER_TYPES, default='applicant')
     
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        db_table = 'accounts_user'  # Explicit table name
+        # verbose_name = _('user')
+        # verbose_name_plural = _('users')
 
 class EmployerProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='employer_profile')
