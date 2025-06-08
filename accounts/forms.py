@@ -5,7 +5,7 @@ from .models import User, EmployerProfile, ApplicantProfile
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'user_type', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
 class EmployerProfileForm(forms.ModelForm):
     class Meta:
