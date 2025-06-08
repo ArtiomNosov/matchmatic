@@ -7,21 +7,33 @@ from .forms import UserRegistrationForm, EmployerProfileForm, ApplicantProfileFo
 from .models import User, EmployerProfile, ApplicantProfile, JobPosting
 
 def register(request, role):
-    try:
-        if request.method == 'POST':
-            form = UserRegistrationForm(request.POST)
-            if form.is_valid():
-                user = form.save()
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
                 user.user_type = role
                 user.save()
                 login(request, user)
-                return redirect('profile_setup')
-        
-        else:
-            form = UserRegistrationForm(initial={'user_type': role})
-    except Exception as e:
-        print(f"Ошибка при сохранении формы: {e}")
-    return render(request, 'accounts/register.html', {'form': form, 'role': role})
+                
+                # Redirect based on user type
+                if role == 'employer':
+                    return redirect('employer_dashboard')  # Updated to match your URL name
+                else:
+                    return redirect('applicant_dashboard')  # Updated to match your URL name
+            except Exception as e:
+                form.add_error(None, str(e))
+        return render(request, 'accounts/register.html', {
+            'form': form,
+            'role': role
+        })
+    else:
+        form = UserRegistrationForm(initial={'user_type': role})
+    
+    return render(request, 'accounts/register.html', {
+        'form': form,
+        'role': role
+    })
 
 @login_required
 def profile_setup(request):
