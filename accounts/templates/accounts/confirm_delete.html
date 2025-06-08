@@ -1,0 +1,46 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block title %}Delete {{ object_name|capfirst }} - MatchMatic{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Confirm Deletion</h3>
+                </div>
+                <div class="card-body">
+                    <p>Are you sure you want to delete this {{ object_name }}?</p>
+                    <div class="alert alert-warning">
+                        <strong>Warning:</strong> This action cannot be undone.
+                    </div>
+                    
+                    {% if object_name == 'job posting' %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ object.title }}</h5>
+                                <p class="card-text text-muted">{{ object.employer.company_name }} • {{ object.location }}</p>
+                                <p class="card-text">{{ object.description|truncatewords:30 }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% if cancel_url %}{% url cancel_url %}{% else %}{% url 'employer_dashboard' %}{% endif %}" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Delete {{ object_name|capfirst }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

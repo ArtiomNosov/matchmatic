@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 class User(AbstractUser):
     USER_TYPES = (
@@ -19,6 +20,7 @@ class EmployerProfile(models.Model):
     company_name = models.CharField(max_length=255)
     website = models.URLField(blank=True)
     industry = models.CharField(max_length=100)
+    location = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     
     def __str__(self):
@@ -33,3 +35,30 @@ class ApplicantProfile(models.Model):
     
     def __str__(self):
         return self.user.username
+
+
+class JobPosting(models.Model):
+    EMPLOYMENT_TYPES = [
+        ('full_time', 'Full Time'),
+        ('part_time', 'Part Time'),
+        ('contract', 'Contract'),
+        ('internship', 'Internship'),
+        ('temporary', 'Temporary'),
+    ]
+    
+    employer = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE, related_name='job_postings')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    requirements = models.TextField()
+    location = models.CharField(max_length=255)
+    employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_TYPES, default='full_time')
+    salary = models.CharField(max_length=100, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.title} at {self.employer.company_name}"
+    
+    def get_absolute_url(self):
+        return reverse('job_detail', kwargs={'pk': self.pk})

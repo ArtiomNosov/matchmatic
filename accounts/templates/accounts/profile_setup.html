@@ -1,0 +1,171 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block title %}Complete Your Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Complete Your Profile</h3>
+                    <p class="text-muted">Please fill out the following information</p>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4>Form Errors</h4>
+                            <ul>
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if user_type == 'employer' %}
+                            <div class="mb-3">
+                                <label for="{{ form.company_name.id_for_label }}" class="form-label">Company Name</label>
+                                <input type="text" 
+                                       name="company_name" 
+                                       class="form-control {% if form.company_name.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.company_name.id_for_label }}" 
+                                       value="{{ form.company_name.value|default:'' }}" 
+                                       required>
+                                {% if form.company_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.company_name.errors.0 }}
+                                    </div>
+                                {% else %}
+                                    <div class="invalid-feedback">Please enter your company name.</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.industry.id_for_label }}" class="form-label">Industry</label>
+                                <input type="text" 
+                                       name="industry" 
+                                       class="form-control {% if form.industry.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.industry.id_for_label }}" 
+                                       value="{{ form.industry.value|default:'' }}" 
+                                       required>
+                                {% if form.industry.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.industry.errors.0 }}
+                                    </div>
+                                {% else %}
+                                    <div class="invalid-feedback">Please enter your industry.</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                                <input type="text" 
+                                       name="location" 
+                                       class="form-control {% if form.location.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.location.id_for_label }}" 
+                                       value="{{ form.location.value|default:'' }}" 
+                                       required>
+                                {% if form.location.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.location.errors.0 }}
+                                    </div>
+                                {% else %}
+                                    <div class="invalid-feedback">Please enter your location.</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.website.id_for_label }}" class="form-label">Website</label>
+                                <input type="url" 
+                                       name="website" 
+                                       class="form-control {% if form.website.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.website.id_for_label }}" 
+                                       value="{{ form.website.value|default:'' }}" 
+                                       placeholder="https://example.com">
+                                {% if form.website.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.website.errors.0 }}
+                                    </div>
+                                {% else %}
+                                    <div class="form-text">Enter a valid URL (e.g., https://example.com)</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">Company Description</label>
+                                <textarea name="description" 
+                                          class="form-control {% if form.description.errors %}is-invalid{% endif %}" 
+                                          id="{{ form.description.id_for_label }}" 
+                                          rows="4"
+                                          required>{{ form.description.value|default:'' }}</textarea>
+                                {% if form.description.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.description.errors.0 }}
+                                    </div>
+                                {% else %}
+                                    <div class="invalid-feedback">Please enter a description of your company.</div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                                {{ form.phone }}
+                                <div class="invalid-feedback">Please enter your phone number.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                                {{ form.location }}
+                                <div class="invalid-feedback">Please enter your location.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.current_position.id_for_label }}" class="form-label">Current Position</label>
+                                {{ form.current_position }}
+                                <div class="invalid-feedback">Please enter your current position.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.years_of_experience.id_for_label }}" class="form-label">Years of Experience</label>
+                                {{ form.years_of_experience }}
+                                <div class="invalid-feedback">Please enter your years of experience.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.skills.id_for_label }}" class="form-label">Skills</label>
+                                {{ form.skills }}
+                                <div class="invalid-feedback">Please enter your skills.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.education.id_for_label }}" class="form-label">Education</label>
+                                {{ form.education }}
+                                <div class="invalid-feedback">Please enter your education details.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.resume.id_for_label }}" class="form-label">Resume</label>
+                                {{ form.resume }}
+                                <div class="invalid-feedback">Please upload your resume.</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Complete Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
