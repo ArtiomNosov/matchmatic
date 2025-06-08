@@ -7,16 +7,20 @@ from .forms import UserRegistrationForm, EmployerProfileForm, ApplicantProfileFo
 from .models import User, EmployerProfile, ApplicantProfile, JobPosting
 
 def register(request, role):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.user_type = role
-            user.save()
-            login(request, user)
-            return redirect('profile_setup')
-    else:
-        form = UserRegistrationForm(initial={'user_type': role})
+    try:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                user.user_type = role
+                user.save()
+                login(request, user)
+                return redirect('profile_setup')
+        
+        else:
+            form = UserRegistrationForm(initial={'user_type': role})
+    except Exception as e:
+        print(f"Ошибка при сохранении формы: {e}")
     return render(request, 'accounts/register.html', {'form': form, 'role': role})
 
 @login_required
