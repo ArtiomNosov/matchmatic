@@ -7,7 +7,8 @@ A basic Django application with a landing page and user authentication.
 1. Create a virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: .\venv\Scripts\Activate.ps1
+
 ```
 
 2. Install dependencies:
